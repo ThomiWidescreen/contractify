@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.react-mde {
+  color: black;
+}
+
+.react-mde textarea {
+  color: black; /* Ensures black text inside the textarea */
+}
+
+.react-mde .mde-preview {
+  color: black; /* Ensures black text in preview */
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "Montserrat", sans-serif;
+}
