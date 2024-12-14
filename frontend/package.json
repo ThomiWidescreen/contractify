@@ -9,8 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@eth-optimism/viem": "^0.0.12",
     "@headlessui/react": "^2.2.0",
     "@nanostores/react": "^0.8.2",
+    "@rainbow-me/rainbowkit": "^2.2.1",
+    "@tanstack/react-query": "^5.62.7",
+    "ethers": "^6.13.4",
     "lucide-react": "^0.468.0",
     "nanostores": "^0.11.3",
     "next": "15.1.0",
@@ -18,7 +22,8 @@
     "react-dom": "^19.0.0",
     "react-markdown": "^9.0.1",
     "react-mde": "^11.5.0",
-    "remark-gfm": "^4.0.0"
+    "remark-gfm": "^4.0.0",
+    "wagmi": "^2.14.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

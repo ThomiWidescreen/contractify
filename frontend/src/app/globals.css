@@ -2,17 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-.react-mde {
+
+.react-mde button {
   color: black;
+  border-radius: 30px; /* Ensures black text inside the textarea */
 }
 
-.react-mde textarea {
-  color: black; /* Ensures black text inside the textarea */
-}
-
-.react-mde .mde-preview {
-  color: black; /* Ensures black text in preview */
-}
 
 :root {
   --background: #ffffff;

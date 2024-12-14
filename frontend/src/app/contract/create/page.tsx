@@ -6,6 +6,7 @@ import Confirmation from "@/components/creationSteps/Confirmation";
 import Information from "@/components/creationSteps/Information";
 import Participants from "@/components/creationSteps/Participants";
 import { currentStepStore } from "@/store/stepStore";
+import Navbar from "@/components/Navbar";
 
 const steps = [
   {
@@ -46,6 +47,8 @@ const CreateContract = () => {
   const currentStep = useStore(currentStepStore);
 
   return (
+<>
+    <Navbar/>
     <main className="w-3/4 mx-auto mt-10 p-6 bg-purple-100">
       {/* Title and Description */}
       <div className="text-center mb-8">
@@ -56,52 +59,48 @@ const CreateContract = () => {
         </h1>
         <p className="text-gray-700 text-xl mt-2 font-medium">{steps[currentStep - 1].description}</p>
       </div>
- {/* Step Tracker */}
- <div className="flex items-center gap-10 justify-center">
-        {steps.map((step, index) => {
-          const isActive = index + 1 === currentStep;
-          const isCompleted = index + 1 < currentStep;
+ {/* Step Tracker */}<div className="flex items-center gap-10 justify-center">
+  {steps.map((step, index) => {
+    const isActive = index + 1 === currentStep;
 
-          return (
-            <section className="relative">
-            <div key={step.id} className="flex flex-col-reverse items-center">
-              {/* Step Icon */}
-              <span className=" text-gray-700">{step.label}</span>
-              <div
-                className={`flex flex-col items-center rounded-full ${
-                  isActive
-                    ? "bg-gradient-to-r p-3 from-[#c93ac3] to-[#7749ba]"
-                    : "border-2 border-transparent bg-gradient-to-r from-[#c93ac3] to-[#7749ba] bg-clip-border"
-                }`}
-              >
-                <div
-                  className={`flex items-center justify-center rounded-full ${
-                    isActive || isCompleted ? "fill-current" : "stroke-current bg-purple-100"
-                  }`}
-                >
-                  <img
-                    src={`/icons/${step.icon}.svg`}
-                    className={`w-8 h-8 ${
-                      isActive || isCompleted ? "fill-current" : "stroke-current m-3"
-                    }`}
-                  />
-                </div>
-              </div>
+    return (
+      <section key={step.id} className="relative">
+        <div className="flex flex-col-reverse items-center">
+          {/* Step Label */}
+          <span className="text-gray-700">{step.label}</span>
 
-              {/* Line between steps (except the last step) */}
-              
+          {/* Step Icon */}
+          <div
+            className={`flex flex-col items-center rounded-full ${
+              isActive
+                ? "bg-gradient-to-r p-1 from-[#c93ac3] to-[#7749ba]"
+                : "border-2 border-transparent bg-gradient-to-r from-[#c93ac3] to-[#7749ba] bg-clip-border"
+            }`}
+          >
+            <div
+              className={`flex items-center p-3 justify-center rounded-full ${
+                !isActive && "bg-white"
+              }`}
+            >
+              <img
+                src={`/icons/${step.icon}.svg`}
+                className={`w-8 h-8 ${isActive && "invert"}`}
+              />
             </div>
-            {/* {index < steps.length - 1 && (
-                <div className="w-10 h-0.5 bg-gray-700 mx-2 absolute translate-x-14  top-8"></div>
-              )} */}
-            </section>
-          );
-        })}
-      </div>
+          </div>
+        </div>
+
+
+      </section>
+    );
+  })}
+</div>
+
 
       {/* Step Content */}
       <div className="mt-10 bg-opacity-30 bg-white p-10 rounded-2xl">{steps[currentStep - 1].component}</div>
     </main>
+    </> 
   );
 };
 
