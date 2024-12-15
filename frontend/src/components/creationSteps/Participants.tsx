@@ -1,59 +1,79 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAccount } from "wagmi";
+import { updateFormData } from "@/store/newContractStore";
 import { goToNextStep } from "@/store/stepStore";
 import { Plus } from "lucide-react";
+import { addToast } from "@/store/toastStore";
 
 const ParticipantsStep = () => {
-  const [wallets, setWallets] = useState({
-    senderWallet: "0x5273E34as84asd48as8vad56D5GHC5B686E93f7a5",
-    receiverWallet: "",
+  const { address } = useAccount();
+
+  const [formState, setFormState] = useState({
+    contractorWallet: address || "",
+    contracteeWallet: "",
     arbitrators: [""],
     chooseRandomArbitrators: false,
   });
 
+  useEffect(() => {
+    if (address) {
+      setFormState((prev) => ({ ...prev, contractorWallet: address }));
+    }
+  }, [address]);
+
   const handleInputChange = (field: string, value: string) => {
-    setWallets((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
   const handleAddArbitrator = () => {
-    setWallets((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       arbitrators: [...prev.arbitrators, ""],
     }));
   };
 
   const handleArbitratorChange = (index: number, value: string) => {
-    const updatedArbitrators = [...wallets.arbitrators];
+    const updatedArbitrators = [...formState.arbitrators];
     updatedArbitrators[index] = value;
-    setWallets((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       arbitrators: updatedArbitrators,
     }));
   };
 
   const toggleRandomArbitrators = () => {
-    setWallets((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       chooseRandomArbitrators: !prev.chooseRandomArbitrators,
     }));
   };
 
+  const handleNextStep = () => {
+    if (!formState.contractorWallet || !formState.contracteeWallet || formState.arbitrators.some(arbitrator => !arbitrator.trim())) {
+      addToast("Please fill in all required fields before proceeding.");
+      return;
+    }
+    updateFormData(formState);
+    goToNextStep();
+  };
+
   return (
     <section>
       <div className="mt-6 space-y-6">
-        {/* Sender Wallet */}
+        {/* Contractor Wallet */}
         <div>
           <label className="block text-gray-700 text-sm font-medium mb-2">Your Wallet</label>
           <div className="flex items-center gap-4">
             <input
               type="text"
-              value={wallets.senderWallet}
+              value={formState.contractorWallet}
               readOnly
-              className="w-full p-3 border rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 border rounded-md bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
             <button className="px-4 text-sm whitespace-nowrap py-2 bg-white border-2 border-gray-800 text-gray-800 rounded-full hover:bg-gray-300">
               Connect Another Wallet
@@ -61,15 +81,15 @@ const ParticipantsStep = () => {
           </div>
         </div>
 
-        {/* Receiver Wallet */}
+        {/* Contractee Wallet */}
         <div>
-          <label className="block text-gray-700 text-sm font-medium mb-2">{"Receiver's Wallet"}</label>
+          <label className="block text-gray-700 text-sm font-medium mb-2">Contractee's Wallet</label>
           <input
             type="text"
-            value={wallets.receiverWallet}
-            onChange={(e) => handleInputChange("receiverWallet", e.target.value)}
+            value={formState.contracteeWallet}
+            onChange={(e) => handleInputChange("contracteeWallet", e.target.value)}
             placeholder="Enter the wallet to receive funds upon contract completion"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full p-3 border rounded-md text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
 
@@ -77,14 +97,14 @@ const ParticipantsStep = () => {
         <div>
           <label className="block text-gray-700 text-sm font-medium mb-2">Arbitrators</label>
           <div className="space-y-4">
-            {wallets.arbitrators.map((arbitrator, index) => (
+            {formState.arbitrators.map((arbitrator, index) => (
               <div key={index} className="flex items-center gap-4">
                 <input
                   type="text"
                   value={arbitrator}
                   onChange={(e) => handleArbitratorChange(index, e.target.value)}
                   placeholder="Enter the arbitrator's wallet (You can choose more than one)"
-                  className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full p-3 border text-black rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
             ))}
@@ -102,7 +122,7 @@ const ParticipantsStep = () => {
         <div className="flex items-center gap-4">
           <input
             type="checkbox"
-            checked={wallets.chooseRandomArbitrators}
+            checked={formState.chooseRandomArbitrators}
             onChange={toggleRandomArbitrators}
             className="w-5 h-5"
           />
@@ -111,7 +131,7 @@ const ParticipantsStep = () => {
 
         {/* Done Button */}
         <button
-          onClick={goToNextStep}
+          onClick={handleNextStep}
           className="text-2xl inline-block bg-gradient-to-r border-2 border-gray-100 text-gray-100 from-[#c93ac3] to-[#7749ba] px-4 py-2 rounded-2xl"
         >
           DONE!

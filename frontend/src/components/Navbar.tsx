@@ -6,7 +6,6 @@ import { Providers } from "./Providers";
 
 const Navbar = () => {
   return (
-    <Providers>
     <header className=" p-4 border-b">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
@@ -48,7 +47,6 @@ const Navbar = () => {
         </div>
       </div>
     </header>
-    </Providers>
 
   );
 };

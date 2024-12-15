@@ -10,7 +10,7 @@ const queryClient = new QueryClient();
 
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
-  if(window){
+  if (window) {
     return (
         <QueryClientProvider client={queryClient}>
           <WagmiProvider config={wagmiConfig()}>{children}</WagmiProvider>

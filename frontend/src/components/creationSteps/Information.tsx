@@ -9,6 +9,8 @@ import "react-mde/lib/styles/css/react-mde-all.css";
 import { enhanceWithAI } from "@/utils/enhance";
 import contractTemplates from "@/utils/templates";
 import { goToNextStep } from "@/store/stepStore";
+import { updateFormData } from "@/store/newContractStore";
+import { addToast } from "@/store/toastStore";
 
 const InformationStep = () => {
   const [contractDetails, setContractDetails] = useState({
@@ -42,8 +44,19 @@ const InformationStep = () => {
         ...prev,
         content: enhancedContent,
       }));
-      alert("Contract content enhanced successfully!");
     }
+  };
+
+  const handleNextStep = () => {
+    const { name, startDate, endDate, content } = contractDetails;
+
+    if (!name.trim() || !startDate.trim() || !endDate.trim() || !content.trim()) {
+      addToast("Please fill in all required fields before proceeding.");
+      return;
+    }
+
+    updateFormData(contractDetails);
+    goToNextStep();
   };
 
   return (
@@ -61,19 +74,19 @@ const InformationStep = () => {
               value={contractDetails.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
               placeholder="Enter contract name"
-              className="flex-1 p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="flex-1 p-3 border rounded-md text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
             <input
               type="date"
               value={contractDetails.startDate}
               onChange={(e) => handleInputChange("startDate", e.target.value)}
-              className="w-1/3 p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-1/3 p-3 border rounded-md text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
             <input
               type="date"
               value={contractDetails.endDate}
               onChange={(e) => handleInputChange("endDate", e.target.value)}
-              className="w-1/3 p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-1/3 p-3 border rounded-md text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
         </div>
@@ -143,8 +156,12 @@ const InformationStep = () => {
             )}
           </button>
         </div>
-      <button onClick={goToNextStep} className="text-2xl inline-block bg-gradient-to-r border-2 border-gray-100 text-gray-100 from-[#c93ac3] to-[#7749ba] px-4 py-2 rounded-2xl">Done!</button>
-
+        <button
+          onClick={handleNextStep}
+          className="text-2xl inline-block bg-gradient-to-r border-2 border-gray-100 text-gray-100 from-[#c93ac3] to-[#7749ba] px-4 py-2 rounded-2xl"
+        >
+          Done!
+        </button>
       </div>
     </section>
   );

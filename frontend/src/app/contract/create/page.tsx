@@ -7,6 +7,7 @@ import Information from "@/components/creationSteps/Information";
 import Participants from "@/components/creationSteps/Participants";
 import { currentStepStore } from "@/store/stepStore";
 import Navbar from "@/components/Navbar";
+import { Providers } from "@/components/Providers";
 
 const steps = [
   {
@@ -48,7 +49,8 @@ const CreateContract = () => {
 
   return (
 <>
-    <Navbar/>
+  <Providers>
+    <Navbar></Navbar>
     <main className="w-3/4 mx-auto mt-10 p-6 bg-purple-100">
       {/* Title and Description */}
       <div className="text-center mb-8">
@@ -100,6 +102,7 @@ const CreateContract = () => {
       {/* Step Content */}
       <div className="mt-10 bg-opacity-30 bg-white p-10 rounded-2xl">{steps[currentStep - 1].component}</div>
     </main>
+    </Providers>
     </> 
   );
 };
